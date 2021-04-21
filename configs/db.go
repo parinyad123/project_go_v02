@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-pg/pg/v10"
 
+	"project_go_v02/controllers"
 	models "project_go_v02/models"
 )
 
@@ -30,6 +31,8 @@ func Connect() *pg.DB {
 	if err != nil {
 		panic(err)
 	}
+
+	controllers.InitiateDB(db)
 
 	return db
 } 
