@@ -2,4 +2,7 @@ module project_go_v02
 
 go 1.16
 
-require github.com/go-pg/pg/v10 v10.9.0 // indirect
+require (
+	github.com/gin-gonic/gin v1.7.1 // indirect
+	github.com/go-pg/pg/v10 v10.9.0 // indirect
+)
