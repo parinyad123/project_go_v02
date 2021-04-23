@@ -8,10 +8,14 @@ import (
 )
 
 
-func Routes(r *gin.Engine) {
-	r.GET("/", apitest)
-	r.GET("/tm", controllers.GetTMdata)
-	r.NoRoute(notFound)
+func Routes(router *gin.Engine) {
+	router.GET("/", apitest)
+	router.GET("/tm", controllers.GetTMdata)
+	router.GET("/tmtheos", controllers.GETtmTHEOS)
+	router.GET("/tmtheosub", controllers.GETtmTHEOS_sub)
+	router.GET("/tmid", controllers.GETtm_onlyid)
+	router.GET("/gettele", controllers.GETtmTHEOS)
+	router.NoRoute(notFound)
 }
 
 func apitest(c *gin.Context) {
