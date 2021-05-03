@@ -12,7 +12,7 @@ import (
 type Satellite struct {
 	Id string `json:"id"`
 	Satellite_name string `่json:"satellite_name"`
-	SubSystem []*SubSystem `pg:"rel:has-many"`
+	SubSystem []*Telemetry `pg:"rel:has-many"`
 }
 
 type SubSystem struct {

@@ -15,6 +15,14 @@ func Routes(router *gin.Engine) {
 	router.GET("/tmtheosub", controllers.GETtmTHEOS_sub)
 	router.GET("/tmid", controllers.GETtm_onlyid)
 	router.GET("/gettele", controllers.GETtmTHEOS)
+	router.GET("/sub_relation", controllers.GETtmTHEOS_sub_relation)
+	router.GET("/countsat", controllers.GET_count_sat)
+	router.GET("/getjson", controllers.GET_json)
+	router.GET("/getjson02", controllers.GET_json02)
+	router.GET("/getjson03", controllers.GET_json03)
+	router.GET("/getjson04", controllers.GET_json04)
+	router.GET("/getjson05", controllers.GET_json05)
+	router.GET("/getjson06", controllers.GET_json06)
 	router.NoRoute(notFound)
 }
 
