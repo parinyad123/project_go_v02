@@ -21,6 +21,12 @@ func InitiateDB(db *pg.DB) {
 	dbConnect = db
 }
 
+var dbtmConnect *pg.DB
+
+func InitiateDB_tm(dbtm *pg.DB) {
+	dbtmConnect = dbtm
+}
+
 func GetTMdata(c *gin.Context) {
 
 	var tms []models.Telemetry

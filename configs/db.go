@@ -35,4 +35,4 @@ func Connect() *pg.DB {
 	controllers.InitiateDB(db)
 
 	return db
-} 
+}
