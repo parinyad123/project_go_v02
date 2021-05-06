@@ -23,6 +23,7 @@ func Routes(router *gin.Engine) {
 	router.GET("/getjson04", controllers.GET_json04)
 	router.GET("/getjson05", controllers.GET_json05)
 	router.GET("/getjson06", controllers.GET_json06)
+	router.GET("/gettmanomaly", controllers.GetTM_Anomaly)
 	router.NoRoute(notFound)
 }
 

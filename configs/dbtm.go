@@ -3,7 +3,7 @@ package configs
 import (
 	"log"
 	"os"
-	// "project_go_v02/controllers"
+	controllers "project_go_v02/controllers"
 
 	"github.com/go-pg/pg/v10"
 	// "project_go_v02/controllers"
@@ -28,7 +28,7 @@ func Connect_tm() *pg.DB {
 
 	log.Printf("Connect to Telemetry DB success ....")
 
-	// controllers.InitiateDB_tm(dbtm)
+	controllers.InitiateDB_tm(dbtm)
 
 
 	return dbtm

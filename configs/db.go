@@ -6,7 +6,7 @@ import (
 
 	"github.com/go-pg/pg/v10"
 
-	"project_go_v02/controllers"
+	controllers "project_go_v02/controllers"
 	models "project_go_v02/models"
 )
 

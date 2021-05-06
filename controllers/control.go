@@ -19,13 +19,9 @@ var dbConnect *pg.DB
 
 func InitiateDB(db *pg.DB) {
 	dbConnect = db
+	fmt.Println("db connect = ", dbConnect)
 }
 
-var dbtmConnect *pg.DB
-
-func InitiateDB_tm(dbtm *pg.DB) {
-	dbtmConnect = dbtm
-}
 
 func GetTMdata(c *gin.Context) {
 
