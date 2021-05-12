@@ -25,10 +25,10 @@ type Telemetry struct {
 	Id string `json:"id"`
 	Satellite_name string `json:"satellite_name"`
 	Subsystem_name string `json:"subsystem_name"`
-	TM_name string `json:"-"`
+	TM_name string `json:"tm_name"`
 	Description string `json:"description"`
 	Image string `json:"image"`
-	TM_package string `json:"-" pg:"-"`
+	TM_package string `json:"tm_package"`
 }
 
 type Telemetry_id struct {

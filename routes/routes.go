@@ -26,7 +26,7 @@ func Routes(router *gin.Engine) {
 	router.GET("/gettmanomaly", controllers.GetTM_Anomaly)
 	router.GET("/gettmanomaly_epoch", controllers.GetTM_Anomaly_epochQuery)
 	router.GET("/gettmanomaly_epochbewteen", controllers.GetTM_Anomaly_epochbetweenQuery)
-	router.POST("/postparam", controllers.POST_requet)
+	router.POST("/postparam", controllers.POST_request)
 	router.NoRoute(notFound)
 }
 

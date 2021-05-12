@@ -6,9 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	// "github.com/go-playground/locales/id_ID"
-
-	// "project_go_v02/configs"
+	
 	"project_go_v02/models"
 
 	"github.com/go-pg/pg/v10"
@@ -90,14 +88,10 @@ func GetTM_Anomaly_epochbetweenQuery(c *gin.Context) {
 		"data": tm_anomaly_epoch,
 	})
 }
-type ParamInput struct {
-	Idtm string `json:"tm_id" binding:"required"`
-	EpochTenStart uint32 `json:"Epoch_start" binding:"required"`
-	EpochTenEnd uint32 `json:"Epoch_end" binding:"required"`
-}
-func POST_requet(c *gin.Context) {
 
-	var param ParamInput
+func POST_request(c *gin.Context) {
+
+	var param models.ParamInput
 	// fmt.Println(param)
 	c.BindJSON(&param)
 	idTM := param.Idtm
@@ -105,6 +99,19 @@ func POST_requet(c *gin.Context) {
 	epochend := param.EpochTenEnd
 	// fmt.Println(param)
 	fmt.Println("Param: ", idTM, epochstart, epochend)
+
+	var tmdetail []models.Telemetry
+
+	errdetail := dbConnect.Model(&tmdetail).Where("id=?", idTM).Select()
+
+	if errdetail != nil {
+		log.Panicf("Error while getting Detail of tm, Reason: %v\n", errdetail)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"massage": "Someting went wrong",
+		})
+		return
+	}
 
 	var tm_anomaly_epoch []models.TmTest02Tsurvobs
 
@@ -122,7 +129,8 @@ func POST_requet(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, gin.H{
-		"data": tm_anomaly_epoch,
+		"data_detail": tmdetail,
+		"data_tm": tm_anomaly_epoch,
 	})
 
 	

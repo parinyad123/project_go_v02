@@ -5,7 +5,11 @@ import (
 
 )
 
-
+type ParamInput struct {
+	Idtm string `json:"tm_id"`
+	EpochTenStart uint32 `json:"Epoch_start"`
+	EpochTenEnd uint32 `json:"Epoch_end"`
+}
 // ต้องสร้าง struct ที่มีชื่อสอดคล้องกับ table ใน db
 // โดยถ้า TmTest02Tsurvobs golang จะจับกับ tm_Test02_tsurvobs
 // type TmTest02Tsurvobs struct {
