@@ -49,6 +49,12 @@ type TmTest02Tsurvobs struct {
 	tmStruct 
 }
 
+// var tmii = TmTest02Tsurvobs
 
+type Tm0010010001Theos struct {
+	tmStruct
+}
 
-// var tmstru []
+type TmTestTsurvobs struct {
+	tmStruct 
+}
