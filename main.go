@@ -18,9 +18,13 @@ func main() {
 	defer db.Close()
 
 	dbtm := configs.Connect_tm()
-	fmt.Println("db tm =", dbtm)
+	// fmt.Println("db tm =", dbtm)
 	defer dbtm.Close()
 
+	dbsqlpg := configs.Connect_sqlpg()
+	fmt.Println("dbsqlpg =", dbsqlpg)
+	defer dbsqlpg.Close()
+	
 	router := gin.Default()
 
 	routes.Routes(router)
