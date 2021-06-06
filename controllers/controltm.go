@@ -175,8 +175,6 @@ func POST_request_v2(c *gin.Context) {
 	}
 }
 
-
-
 func POST_request_dynamic_str(c *gin.Context) {
 
 	var param models.ParamInput
@@ -272,8 +270,6 @@ func POST_request_dynamic_float(c *gin.Context) {
 	// fmt.Println("tm0 => ", tm_anomalys[0].Avg)
 	// fmt.Println("type > ",reflect.TypeOf(tm_anomalys[0]))
 
-	
-
 	c.JSON(http.StatusOK, gin.H{
 		"data_detail": tmdetail,
 		"data_tm":     tm_anomalys,
@@ -311,7 +307,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.utc").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
+		Where("lost_state=?", 0).
 		Select(&utc_tm)
 
 	// avg
@@ -321,7 +317,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.avg").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
+		Where("lost_state=?", 0).
 		Select(&avg_tm)
 
 	// STD
@@ -331,7 +327,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.std").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
+		Where("lost_state=?", 0).
 		Select(&std_tm)
 
 	// MAX
@@ -341,7 +337,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.max").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
+		Where("lost_state=?", 0).
 		Select(&max_tm)
 
 	// MIN
@@ -351,7 +347,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.min").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
+		Where("lost_state=?", 0).
 		Select(&min_tm)
 
 	// Q1
@@ -361,7 +357,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.q1").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
+		Where("lost_state=?", 0).
 		Select(&q1_tm)
 
 	// Q2
@@ -371,7 +367,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.q2").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
+		Where("lost_state=?", 0).
 		Select(&q2_tm)
 
 	// Q3
@@ -381,7 +377,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.q3").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
+		Where("lost_state=?", 0).
 		Select(&q3_tm)
 
 	// utc anomaly 1
@@ -391,8 +387,8 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.utc").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
-		Where("anomaly_state=?",2).
+		Where("lost_state=?", 0).
+		Where("anomaly_state=?", 2).
 		Select(&utc_ano1)
 
 	// anomaly 1
@@ -402,8 +398,8 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.avg").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
-		Where("anomaly_state=?",2).
+		Where("lost_state=?", 0).
+		Where("anomaly_state=?", 2).
 		Select(&ano1)
 
 	// utc anomaly 2
@@ -413,8 +409,8 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.utc").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
-		Where("anomaly_state=?",4).
+		Where("lost_state=?", 0).
+		Where("anomaly_state=?", 4).
 		Select(&utc_ano2)
 
 	// anomaly 2
@@ -424,8 +420,8 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.avg").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
-		Where("anomaly_state=?",4).
+		Where("lost_state=?", 0).
+		Where("anomaly_state=?", 4).
 		Select(&ano2)
 
 	// utc anomaly 3
@@ -435,8 +431,8 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.utc").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
-		Where("anomaly_state=?",8).
+		Where("lost_state=?", 0).
+		Where("anomaly_state=?", 8).
 		Select(&utc_ano3)
 
 	// anomaly 3
@@ -446,8 +442,8 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.avg").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",0).
-		Where("anomaly_state=?",8).
+		Where("lost_state=?", 0).
+		Where("anomaly_state=?", 8).
 		Select(&ano3)
 
 	// utc lost
@@ -457,7 +453,7 @@ func POST_request_dynamic_slice(c *gin.Context) {
 		Column("t.utc").
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
-		Where("lost_state=?",1).
+		Where("lost_state=?", 1).
 		Select(&utc_lost)
 
 	if err != nil {
@@ -471,20 +467,20 @@ func POST_request_dynamic_slice(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"data_detail": tmdetail,
-		"tm_utc": utc_tm,
-		"tm_avg": avg_tm,
-		"tm_std": std_tm,
-		"tm_min": min_tm,
-		"tm_max": max_tm,
-		"tm_q1": q1_tm,
-		"tm_q2": q2_tm,
-		"tm_q3": q3_tm,
+		"tm_utc":      utc_tm,
+		"tm_avg":      avg_tm,
+		"tm_std":      std_tm,
+		"tm_min":      min_tm,
+		"tm_max":      max_tm,
+		"tm_q1":       q1_tm,
+		"tm_q2":       q2_tm,
+		"tm_q3":       q3_tm,
 		"tm_utc_ano1": utc_ano1,
-		"tm_ano1": ano1,
+		"tm_ano1":     ano1,
 		"tm_utc_ano2": utc_ano2,
-		"tm_ano2": ano2,
+		"tm_ano2":     ano2,
 		"tm_utc_ano3": utc_ano3,
-		"tm_ano3": ano3,
+		"tm_ano3":     ano3,
 		"tm_utc_lost": utc_lost,
 	})
 
@@ -580,22 +576,98 @@ func POST_request_dynamic_float_slice(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"data_detail": tmdetail,
-		"tm_utc": utc_tm,
-		"tm_avg": avg_tm,
-		"tm_std": std_tm,
-		"tm_min": min_tm,
-		"tm_max": max_tm,
-		"tm_q1": q1_tm,
-		"tm_q2": q2_tm,
-		"tm_q3": q3_tm,
+		"tm_utc":      utc_tm,
+		"tm_avg":      avg_tm,
+		"tm_std":      std_tm,
+		"tm_min":      min_tm,
+		"tm_max":      max_tm,
+		"tm_q1":       q1_tm,
+		"tm_q2":       q2_tm,
+		"tm_q3":       q3_tm,
 		"tm_utc_ano1": utc_ano1,
-		"tm_ano1": ano1,
+		"tm_ano1":     ano1,
 		"tm_utc_ano2": utc_ano2,
-		"tm_ano2": ano2,
+		"tm_ano2":     ano2,
 		"tm_utc_ano3": utc_ano3,
-		"tm_ano3": ano3,
+		"tm_ano3":     ano3,
 		"tm_utc_lost": utc_lost,
 	})
 
 }
 
+func POST_request_dynamic_float_slice_struct(c *gin.Context) {
+
+	var param models.ParamInput
+	c.BindJSON(&param)
+	idTM := param.Idtm
+	epochstart := param.EpochTenStart
+	epochend := param.EpochTenEnd
+
+	fmt.Println("Param: ", idTM, epochstart, epochend)
+
+	// TM DETAIL
+	var tmdetail []models.Telemetry
+	errdetail := dbConnect.Model(&tmdetail).Where("id=?", idTM).Select()
+
+	if errdetail != nil {
+		log.Panicf("Error while getting Detail of tm, Reason: %v\n", errdetail)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"massage": "Someting went wrong",
+		})
+		return
+	}
+
+	// TM DATA
+	var tm_anomalys []models.TabletmFload
+
+	err := dbtmConnect.Model().
+		TableExpr(idTM+" AS tmodel").
+		Column("tmodel.id", "tmodel.avg", "tmodel.max", "tmodel.min", "tmodel.std", "tmodel.q1", "tmodel.q2", "tmodel.q3", "tmodel.lost_state", "tmodel.anomaly_state", "tmodel.utc", "tmodel.epoch_ten").
+		Where("epoch_ten>?", epochstart).
+		Where("epoch_ten<?", epochend).
+		Select(&tm_anomalys)
+
+	if err != nil {
+		log.Panicf("Error getting TM anomaly data, Reason: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"massege": "Something went wrong",
+		})
+		return
+	}
+
+	var ds models.DataSlice
+
+	for _, s := range tm_anomalys {
+		if s.LostState == 0 {
+			ds.Utc_tm = append(ds.Utc_tm, s.UTC)
+			ds.Avg_tm = append(ds.Avg_tm, s.Avg)
+			ds.Std_tm = append(ds.Std_tm, s.Std)
+			ds.Min_tm = append(ds.Min_tm, s.Min)
+			ds.Max_tm = append(ds.Max_tm, s.Max)
+			ds.Q1_tm = append(ds.Q1_tm, s.Q1)
+			ds.Q2_tm = append(ds.Q2_tm, s.Q2)
+			ds.Q3_tm = append(ds.Q3_tm, s.Q3)
+			if s.AnomalyState == 2 {
+				ds.Utc_ano1 = append(ds.Utc_ano1, s.UTC)
+				ds.Ano1 = append(ds.Ano1, s.Avg)
+			} else if s.AnomalyState == 4 {
+				ds.Utc_ano2 = append(ds.Utc_ano2, s.UTC)
+				ds.Ano2 = append(ds.Ano2, s.Avg)
+			} else if s.AnomalyState == 8 {
+				ds.Utc_ano3 = append(ds.Utc_ano3, s.UTC)
+				ds.Ano3 = append(ds.Ano3, s.Avg)
+			}
+
+		} else if s.LostState == 1 {
+			ds.Utc_lost = append(ds.Utc_lost, s.UTC)
+		}
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data_detail": tmdetail,
+		"data_tm":     ds,
+	})
+
+}

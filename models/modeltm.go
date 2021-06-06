@@ -53,6 +53,24 @@ type TmTestTsurvobs struct {
 	tmStruct
 }
 
+type DataSlice struct {
+	Utc_tm []string `json:"tm_utc"`
+	Avg_tm []float32 `json:"tm_avg"`
+	Std_tm []float32 `json:"tm_std"`
+	Min_tm []float32 `json:"tm_min"`
+	Max_tm []float32 `json:"tm_max"`
+	Q1_tm []float32 `json:"tm_q1"`
+	Q2_tm []float32 `json:"tm_q2"`
+	Q3_tm []float32 `json:"tm_q3"`
+	Utc_ano1 []string `json:"tm_utc_ano1"`
+	Ano1 []float32 `json:"tm_ano1"`
+	Utc_ano2 []string `json:"tm_utc_ano2"`
+	Ano2 []float32 `json:"tm_ano2"`
+	Utc_ano3 []string `json:"tm_utc_ano3"`
+	Ano3 []float32 `json:"tm_ano3"`
+	Utc_lost []string `json:"tm_utc_lost"`
+}
+
 // type tmStringdata struct {
 // 	Id           string `json:"id"`
 // 	Avg          string `json:"avg"`
