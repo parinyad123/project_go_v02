@@ -69,7 +69,7 @@ type DataSlice struct {
 	Utc_ano3 []string `json:"tm_utc_ano3"`
 	Ano3 []float32 `json:"tm_ano3"`
 	Utc_lost []string `json:"tm_utc_lost"`
-	Line_lost VerticalLine `json:"aline_lost"`
+	Line_lost []VerticalLine `json:"line_lost"`
 }
 
 type LineStruct struct {
@@ -79,10 +79,12 @@ type LineStruct struct {
 
 type VerticalLine struct {
 	Tyte string `json:"type"`
-	UTC string `json:"x0"`
+	Utc string `json:"x0"`
 	Y0 uint8 `json:"y0"`
 	X1 string `json:"x1"`
-	Yref string `json:"paper"`
+	Yref string `json:"yref"`
+	Y1 uint8 `json:"y1"`
+	Opacity float32 `json:"opacity"`
 	Line LineStruct `json:"line"`
 }
 // type tmStringdata struct {

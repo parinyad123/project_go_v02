@@ -638,11 +638,6 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 	}
 
 	var v []models.VerticalLine
-	for i, d := range v {
-		fmt.Println("-----")
-		fmt.Println(i)
-		fmt.Println(d)
-	}
 	
 	err = dbtmConnect.Model().
 		TableExpr(idTM+" AS tmodel").
@@ -651,7 +646,16 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		Where("epoch_ten<?", epochend).
 		Where("lost_state=?", 1).
 		Select(&v)
-	// fmt.Println(v)
+
+	for i,_ := range v {
+		v[i].Tyte = "line"
+		v[i].X1 = v[i].Utc
+		v[i].Yref = "paper"
+		v[i].Y1 = 1
+		v[i].Opacity = 0.5
+		v[i].Line.Color = "rgb(0, 255, 153)" 
+		v[i].Line.Width = 1.0		
+	}
 
 	var ds models.DataSlice
 
@@ -678,16 +682,14 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 
 		} else if s.LostState == 1 {
 			ds.Utc_lost = append(ds.Utc_lost, s.UTC)
-			// ds.Line_lost.X0 = append(ds.Line_lost.X0, s.UTC)
 		}
 	}
 
-	// ds.Line_lost = v
+	ds.Line_lost = v
 
 	c.JSON(http.StatusOK, gin.H{
 		"data_detail": tmdetail,
 		"data_tm":     ds,
-		"ver": v,
 	})
 
 }
