@@ -559,7 +559,7 @@ func GET_json06(c *gin.Context) {
 
 	}
 
-	fmt.Println("SatMapSlice = ", SatMapSlice)
+	// fmt.Println("SatMapSlice = ", SatMapSlice)
 
 
 	// for 
@@ -576,7 +576,7 @@ func GET_json06(c *gin.Context) {
 	
 
 
-	fmt.Println(tmslice)
+	// fmt.Println(tmslice)
 	// fmt.Println(SubMapSlice)
 
 

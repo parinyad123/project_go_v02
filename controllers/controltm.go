@@ -637,6 +637,22 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		return
 	}
 
+	var v []models.VerticalLine
+	for i, d := range v {
+		fmt.Println("-----")
+		fmt.Println(i)
+		fmt.Println(d)
+	}
+	
+	err = dbtmConnect.Model().
+		TableExpr(idTM+" AS tmodel").
+		Column("tmodel.utc").
+		Where("epoch_ten>?", epochstart).
+		Where("epoch_ten<?", epochend).
+		Where("lost_state=?", 1).
+		Select(&v)
+	// fmt.Println(v)
+
 	var ds models.DataSlice
 
 	for _, s := range tm_anomalys {
@@ -662,12 +678,16 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 
 		} else if s.LostState == 1 {
 			ds.Utc_lost = append(ds.Utc_lost, s.UTC)
+			// ds.Line_lost.X0 = append(ds.Line_lost.X0, s.UTC)
 		}
 	}
+
+	// ds.Line_lost = v
 
 	c.JSON(http.StatusOK, gin.H{
 		"data_detail": tmdetail,
 		"data_tm":     ds,
+		"ver": v,
 	})
 
 }
