@@ -688,9 +688,7 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 				ds.Ano3 = append(ds.Ano3, s.Avg)
 			}
 
-		} else if s.LostState == 1 {
-			ds.Utc_lost = append(ds.Utc_lost, s.UTC)
-		}
+		} 
 	}
 
 	ds.Line_lost = l
