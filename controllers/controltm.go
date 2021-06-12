@@ -637,7 +637,7 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		return
 	}
 
-	var v []models.VerticalLine
+	var l []models.VerticalLine
 	
 	err = dbtmConnect.Model().
 		TableExpr(idTM+" AS tmodel").
@@ -645,30 +645,38 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		Where("epoch_ten>?", epochstart).
 		Where("epoch_ten<?", epochend).
 		Where("lost_state=?", 1).
-		Select(&v)
+		Select(&l)
 
-	for i,_ := range v {
-		v[i].Tyte = "line"
-		v[i].X1 = v[i].Utc
-		v[i].Yref = "paper"
-		v[i].Y1 = 1
-		v[i].Opacity = 0.5
-		v[i].Line.Color = "rgb(0, 255, 153)" 
-		v[i].Line.Width = 1.0		
+	for i,_ := range l {
+		l[i].Tyte = "line"
+		l[i].X1 = l[i].Utc
+		l[i].Yref = "paper"
+		l[i].Y1 = 1
+		l[i].Opacity = 0.01
+		l[i].Line.Color = "rgb(0, 255, 153)" 
+		l[i].Line.Width = 1.0		
 	}
 
 	var ds models.DataSlice
 
 	for _, s := range tm_anomalys {
+		ds.Utc_tm = append(ds.Utc_tm, s.UTC)
+		ds.Avg_tm = append(ds.Avg_tm, s.Avg)
+		ds.Std_tm = append(ds.Std_tm, s.Std)
+		ds.Min_tm = append(ds.Min_tm, s.Min)
+		ds.Max_tm = append(ds.Max_tm, s.Max)
+		ds.Q1_tm = append(ds.Q1_tm, s.Q1)
+		ds.Q2_tm = append(ds.Q2_tm, s.Q2)
+		ds.Q3_tm = append(ds.Q3_tm, s.Q3)
 		if s.LostState == 0 {
-			ds.Utc_tm = append(ds.Utc_tm, s.UTC)
-			ds.Avg_tm = append(ds.Avg_tm, s.Avg)
-			ds.Std_tm = append(ds.Std_tm, s.Std)
-			ds.Min_tm = append(ds.Min_tm, s.Min)
-			ds.Max_tm = append(ds.Max_tm, s.Max)
-			ds.Q1_tm = append(ds.Q1_tm, s.Q1)
-			ds.Q2_tm = append(ds.Q2_tm, s.Q2)
-			ds.Q3_tm = append(ds.Q3_tm, s.Q3)
+			// ds.Utc_tm = append(ds.Utc_tm, s.UTC)
+			// ds.Avg_tm = append(ds.Avg_tm, s.Avg)
+			// ds.Std_tm = append(ds.Std_tm, s.Std)
+			// ds.Min_tm = append(ds.Min_tm, s.Min)
+			// ds.Max_tm = append(ds.Max_tm, s.Max)
+			// ds.Q1_tm = append(ds.Q1_tm, s.Q1)
+			// ds.Q2_tm = append(ds.Q2_tm, s.Q2)
+			// ds.Q3_tm = append(ds.Q3_tm, s.Q3)
 			if s.AnomalyState == 2 {
 				ds.Utc_ano1 = append(ds.Utc_ano1, s.UTC)
 				ds.Ano1 = append(ds.Ano1, s.Avg)
@@ -685,7 +693,7 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		}
 	}
 
-	ds.Line_lost = v
+	ds.Line_lost = l
 
 	c.JSON(http.StatusOK, gin.H{
 		"data_detail": tmdetail,
