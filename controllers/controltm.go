@@ -4,20 +4,26 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
+	"encoding/csv"
+
+
 	// "reflect"
 
-	"github.com/gin-gonic/gin"
 	"project_go_v02/models"
+
+	"github.com/gin-gonic/gin"
 
 	"github.com/go-pg/pg/v10"
 )
 
 var dbtmConnect *pg.DB
 
-func InitiateDB_tm(dbtm *pg.DB) {
+func InitiateDB_tm(dbtm *pg.DB) *pg.DB {
 	dbtmConnect = dbtm
 
 	fmt.Println("dbtm connect = ", dbtmConnect)
+	return dbtmConnect
 }
 
 func GetTM_Anomaly(c *gin.Context) {
@@ -638,7 +644,7 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 	}
 
 	// var l []models.VerticalLine
-	
+
 	// err = dbtmConnect.Model().
 	// 	TableExpr(idTM+" AS tmodel").
 	// 	Column("tmodel.utc").
@@ -653,13 +659,13 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 	// 	l[i].Yref = "paper"
 	// 	l[i].Y1 = 1
 	// 	l[i].Opacity = 0.01
-	// 	l[i].Line.Color = "rgb(0, 255, 153)" 
-	// 	l[i].Line.Width = 1.0		
+	// 	l[i].Line.Color = "rgb(0, 255, 153)"
+	// 	l[i].Line.Width = 1.0
 	// }
 
 	var ds models.DataSlice
 	var ano_state []float32
-	
+
 	for _, s := range tm_anomalys {
 		ds.Utc_tm = append(ds.Utc_tm, s.UTC)
 		ds.Avg_tm = append(ds.Avg_tm, s.Avg)
@@ -669,7 +675,7 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		ds.Q1_tm = append(ds.Q1_tm, s.Q1)
 		ds.Q2_tm = append(ds.Q2_tm, s.Q2)
 		ds.Q3_tm = append(ds.Q3_tm, s.Q3)
-		
+
 		if s.LostState == 0 {
 			ano_state = append(ano_state, s.AnomalyState)
 			// ds.Utc_tm = append(ds.Utc_tm, s.UTC)
@@ -711,37 +717,36 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 	s_collect := []string{}
 	e_collect := []string{}
 
-
-	for k:=0; k<AnoCount_Condition; k++ {
+	for k := 0; k < AnoCount_Condition; k++ {
 		ano_state = append(ano_state, 0)
 	}
 
 	for i, t := range ano_state {
 		// Find Start date begin
-		if (t!=0 && NoCount==0 && Ano_1==0 && start=="" && end=="") {
-			start = ds.Utc_tm[i]	
-				
+		if t != 0 && NoCount == 0 && Ano_1 == 0 && start == "" && end == "" {
+			start = ds.Utc_tm[i]
+
 			Ano_1 = 1
-		} else if (t!=0 && start!="") {
+		} else if t != 0 && start != "" {
 			Ano_1 += 1
 			NoCount = 0
-		} else if (t==0 && start!="") {
+		} else if t == 0 && start != "" {
 			NoCount += 1
 		}
 
-		if (t==0 && NoCount>NoCount_Condition && Ano_1>=AnoCount_Condition) {
+		if t == 0 && NoCount > NoCount_Condition && Ano_1 >= AnoCount_Condition {
 			// fmt.Println("-------------",i,"------------------")
 			// fmt.Println("Ano Count = ", Ano_1)
 			// fmt.Println("No Count = ",NoCount)
 			end = ds.Utc_tm[i-3]
-			s_collect = append(s_collect, start)	
+			s_collect = append(s_collect, start)
 			e_collect = append(e_collect, end)
 			NoCount = 0
 			Ano_1 = 0
 			start = ""
 			end = ""
 
-		} else if (t==0 && NoCount>NoCount_Condition && Ano_1<AnoCount_Condition) {
+		} else if t == 0 && NoCount > NoCount_Condition && Ano_1 < AnoCount_Condition {
 			NoCount = 0
 			Ano_1 = 0
 			start = ""
@@ -749,30 +754,30 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		}
 	}
 
-		// fmt.Println("Start = ", s_collect)
-		// fmt.Println("End = ", e_collect)
-		// fmt.Println("Start = ", len(s_collect))
-		// fmt.Println("End = ", len(e_collect))
+	// fmt.Println("Start = ", s_collect)
+	// fmt.Println("End = ", e_collect)
+	// fmt.Println("Start = ", len(s_collect))
+	// fmt.Println("End = ", len(e_collect))
 
 	var collect []models.VerticalLine
-	
+
 	// colect[0].Tyte = "Hello"
 	fmt.Println(collect)
-	if len(s_collect)==len(e_collect) {
-		for i:=0; i<len(s_collect); i++ {
+	if len(s_collect) == len(e_collect) {
+		for i := 0; i < len(s_collect); i++ {
 			// fmt.Println(i)
 			col := new(models.VerticalLine)
-			col.Tyte="rect"
-			col.X0=s_collect[i]
-			col.Y0=0
-			col.X1=e_collect[i]
-			col.Y1=1
-			col.Xref="x"
-			col.Yref="paper"
-			col.Opacity=0.7
-			col.Fillcolor="rgb(255, 128, 255)"
-			col.Layer="below"
-			col.Line.Width=0
+			col.Tyte = "rect"
+			col.X0 = s_collect[i]
+			col.Y0 = 0
+			col.X1 = e_collect[i]
+			col.Y1 = 1
+			col.Xref = "x"
+			col.Yref = "paper"
+			col.Opacity = 0.7
+			col.Fillcolor = "rgb(255, 128, 255)"
+			col.Layer = "below"
+			col.Line.Width = 0
 			collect = append(collect, *col)
 		}
 	} else {
@@ -786,4 +791,61 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		"data_tm":     ds,
 	})
 
+}
+
+func CSVdownload(c *gin.Context) {
+	var param models.ParamInput
+	c.BindJSON(&param)
+	idTM := param.Idtm
+	epochstart := param.EpochTenStart
+	epochend := param.EpochTenEnd
+
+	var file []models.CSVstruct
+	
+
+	err := dbtmConnect.Model().
+		TableExpr(idTM+" AS tmodel").
+		Column("tmodel.utc", "tmodel.epoch_ten", "tmodel.avg", "tmodel.max", "tmodel.min", "tmodel.std", "tmodel.q1", "tmodel.q2", "tmodel.q3", "tmodel.anomaly_state").
+		Where("epoch_ten>?", epochstart).
+		Where("epoch_ten<?", epochend).
+		Where("lost_state=?",0).
+		Select(&file)
+
+	if err != nil {
+		log.Panicf("Error getting CSV , Reason: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"massege": "Something went wrong",
+		})
+		return
+	}
+
+
+
+	var data [][]string
+
+	header := []string{"utc", "epoch", "average", "maximum", "minimum", "standard_deviation",
+	 "quartile1", "quartile2", "quartile3", "anomaly_state"}
+
+	data = append(data, header)
+
+	for _, rows := range file {
+		row := []string{}
+		row = append(row, rows.UTC, rows.Epoch_ten, rows.Avg, rows.Max, rows.Min, rows.Std, rows.Q1, rows.Q2, rows.Q3, rows.AnomalyState)
+		data = append(data, row)
+	}
+
+	csvFile, err := os.Create("D:/Backend/csvfile.csv")
+
+	if err != nil {
+		log.Fatalf("failed creating csv file : %s", err)
+	}
+	csvwriter := csv.NewWriter(csvFile)
+
+	for _, empRow := range data {
+		_ = csvwriter.Write(empRow)
+	}
+	csvwriter.Flush()
+	csvFile.Close()
+	
 }
