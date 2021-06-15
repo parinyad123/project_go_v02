@@ -637,28 +637,29 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		return
 	}
 
-	var l []models.VerticalLine
+	// var l []models.VerticalLine
 	
-	err = dbtmConnect.Model().
-		TableExpr(idTM+" AS tmodel").
-		Column("tmodel.utc").
-		Where("epoch_ten>?", epochstart).
-		Where("epoch_ten<?", epochend).
-		Where("lost_state=?", 1).
-		Select(&l)
+	// err = dbtmConnect.Model().
+	// 	TableExpr(idTM+" AS tmodel").
+	// 	Column("tmodel.utc").
+	// 	Where("epoch_ten>?", epochstart).
+	// 	Where("epoch_ten<?", epochend).
+	// 	Where("lost_state=?", 1).
+	// 	Select(&l)
 
-	for i,_ := range l {
-		l[i].Tyte = "line"
-		l[i].X1 = l[i].Utc
-		l[i].Yref = "paper"
-		l[i].Y1 = 1
-		l[i].Opacity = 0.01
-		l[i].Line.Color = "rgb(0, 255, 153)" 
-		l[i].Line.Width = 1.0		
-	}
+	// for i,_ := range l {
+	// 	l[i].Tyte = "line"
+	// 	l[i].X1 = l[i].Utc
+	// 	l[i].Yref = "paper"
+	// 	l[i].Y1 = 1
+	// 	l[i].Opacity = 0.01
+	// 	l[i].Line.Color = "rgb(0, 255, 153)" 
+	// 	l[i].Line.Width = 1.0		
+	// }
 
 	var ds models.DataSlice
-
+	var ano_state []float32
+	
 	for _, s := range tm_anomalys {
 		ds.Utc_tm = append(ds.Utc_tm, s.UTC)
 		ds.Avg_tm = append(ds.Avg_tm, s.Avg)
@@ -668,7 +669,9 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 		ds.Q1_tm = append(ds.Q1_tm, s.Q1)
 		ds.Q2_tm = append(ds.Q2_tm, s.Q2)
 		ds.Q3_tm = append(ds.Q3_tm, s.Q3)
+		
 		if s.LostState == 0 {
+			ano_state = append(ano_state, s.AnomalyState)
 			// ds.Utc_tm = append(ds.Utc_tm, s.UTC)
 			// ds.Avg_tm = append(ds.Avg_tm, s.Avg)
 			// ds.Std_tm = append(ds.Std_tm, s.Std)
@@ -688,10 +691,95 @@ func POST_request_dynamic_float_slice_struct(c *gin.Context) {
 				ds.Ano3 = append(ds.Ano3, s.Avg)
 			}
 
-		} 
+		} else if s.LostState == 1 {
+			ano_state = append(ano_state, 0)
+		}
 	}
 
-	ds.Line_lost = l
+	// ds.Line_lost = l
+	fmt.Println("len ano = ", len(ano_state))
+	fmt.Println("len date = ", len(ds.Utc_tm))
+	// Create Anomaly bar
+	// Constant
+	NoCount_Condition := 2
+	AnoCount_Condition := 3
+	// Variation
+	NoCount := 0
+	Ano_1 := 0
+	var start string = ""
+	var end string = ""
+	s_collect := []string{}
+	e_collect := []string{}
+
+
+	for k:=0; k<AnoCount_Condition; k++ {
+		ano_state = append(ano_state, 0)
+	}
+
+	for i, t := range ano_state {
+		// Find Start date begin
+		if (t!=0 && NoCount==0 && Ano_1==0 && start=="" && end=="") {
+			start = ds.Utc_tm[i]	
+				
+			Ano_1 = 1
+		} else if (t!=0 && start!="") {
+			Ano_1 += 1
+			NoCount = 0
+		} else if (t==0 && start!="") {
+			NoCount += 1
+		}
+
+		if (t==0 && NoCount>NoCount_Condition && Ano_1>=AnoCount_Condition) {
+			// fmt.Println("-------------",i,"------------------")
+			// fmt.Println("Ano Count = ", Ano_1)
+			// fmt.Println("No Count = ",NoCount)
+			end = ds.Utc_tm[i-3]
+			s_collect = append(s_collect, start)	
+			e_collect = append(e_collect, end)
+			NoCount = 0
+			Ano_1 = 0
+			start = ""
+			end = ""
+
+		} else if (t==0 && NoCount>NoCount_Condition && Ano_1<AnoCount_Condition) {
+			NoCount = 0
+			Ano_1 = 0
+			start = ""
+			end = ""
+		}
+	}
+
+		// fmt.Println("Start = ", s_collect)
+		// fmt.Println("End = ", e_collect)
+		// fmt.Println("Start = ", len(s_collect))
+		// fmt.Println("End = ", len(e_collect))
+
+	var collect []models.VerticalLine
+	
+	// colect[0].Tyte = "Hello"
+	fmt.Println(collect)
+	if len(s_collect)==len(e_collect) {
+		for i:=0; i<len(s_collect); i++ {
+			// fmt.Println(i)
+			col := new(models.VerticalLine)
+			col.Tyte="rect"
+			col.X0=s_collect[i]
+			col.Y0=0
+			col.X1=e_collect[i]
+			col.Y1=1
+			col.Xref="x"
+			col.Yref="paper"
+			col.Opacity=0.7
+			col.Fillcolor="rgb(255, 128, 255)"
+			col.Layer="below"
+			col.Line.Width=0
+			collect = append(collect, *col)
+		}
+	} else {
+		fmt.Println("s_collect's length is not equal e_collect's length")
+	}
+	// fmt.Println("Coll= ",collect)
+	ds.Ano_bar = collect
 
 	c.JSON(http.StatusOK, gin.H{
 		"data_detail": tmdetail,

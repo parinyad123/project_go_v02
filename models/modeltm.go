@@ -50,21 +50,24 @@ type DataSlice struct {
 	Ano2 []float32 `json:"tm_ano2"`
 	Utc_ano3 []string `json:"tm_utc_ano3"`
 	Ano3 []float32 `json:"tm_ano3"`
-	Line_lost []VerticalLine `json:"line_lost"`
+	Ano_bar []VerticalLine `json:"bar_ano"`
 }
 
 type LineStruct struct {
-	Color string `json:"color"`
+	// Color string `json:"color"`
 	Width float32 `json:"width"`
 }
 
 type VerticalLine struct {
 	Tyte string `json:"type"`
-	Utc string `json:"x0"`
+	X0 string `json:"x0"`
 	Y0 uint8 `json:"y0"`
-	X1 string `json:"x1"`
+	Xref string `json:"xref"`
 	Yref string `json:"yref"`
+	X1 string `json:"x1"`
 	Y1 uint8 `json:"y1"`
+	Fillcolor string `json:"fillcolor"`
 	Opacity float32 `json:"opacity"`
+	Layer string `json:"layer"`
 	Line LineStruct `json:"line"`
 }
