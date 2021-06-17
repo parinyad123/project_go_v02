@@ -820,8 +820,6 @@ func CSVdownload(c *gin.Context) {
 		return
 	}
 
-
-
 	var data [][]string
 
 	header := []string{"utc", "epoch", "average", "maximum", "minimum", "standard_deviation",
@@ -835,7 +833,9 @@ func CSVdownload(c *gin.Context) {
 		data = append(data, row)
 	}
 
-	csvFile, err := os.Create("D:/Backend/csvfile.csv")
+	pathName := "D:/Backend/project_go_v02/api/"+idTM+".csv"
+
+	csvFile, err := os.Create(pathName)
 
 	if err != nil {
 		log.Fatalf("failed creating csv file : %s", err)
@@ -847,5 +847,19 @@ func CSVdownload(c *gin.Context) {
 	}
 	csvwriter.Flush()
 	csvFile.Close()
+
+	//fmt.Sprintf("attachment; filename=%s", filename) Downloaded file renamed
+	// header "Content-Disposition" is content to downloading file by browser 
+	// Its value is attachment
+	// filename is downloaded file renamed
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "csvfile.csv"))
+    // c.Writer.Header().Add("Content-Type", "application/octet-stream")
+	c.Writer.Header().Add("Content-Type", "text/csv")
+	c.File(pathName)
+
 	
 }
+
+// func donwloadfile(c *gin.Context) {
+
+// }
