@@ -801,8 +801,6 @@ func CSVdownload(c *gin.Context) {
 	epochend := param.EpochTenEnd
 
 	var file []models.CSVstruct
-	
-
 	err := dbtmConnect.Model().
 		TableExpr(idTM+" AS tmodel").
 		Column("tmodel.utc", "tmodel.epoch_ten", "tmodel.avg", "tmodel.max", "tmodel.min", "tmodel.std", "tmodel.q1", "tmodel.q2", "tmodel.q3", "tmodel.anomaly_state").
@@ -860,6 +858,81 @@ func CSVdownload(c *gin.Context) {
 	
 }
 
-// func donwloadfile(c *gin.Context) {
+func GET_CSVdownload(c *gin.Context) {
 
-// }
+	idTM := c.Query("idtm")
+	epochstart := c.Query("start")
+	epochend := c.Query("end")
+
+	fmt.Println(idTM, epochstart, epochend)
+	var tmdetail models.Telemetry
+	errName := dbConnect.Model(&tmdetail).Column("satellite_name", "tm_name").Where("id=?", idTM).Select()
+	if errName != nil {
+		log.Panicf("Error getting CSV detail name , Reason: %v\n", errName)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"massege": "Something went wrong",
+		})
+		return
+	}
+	fmt.Println(tmdetail)
+	csvName := tmdetail.Satellite_name+"-"+tmdetail.TM_name+".csv"
+	// fmt.Println(csvName)
+	var file []models.CSVstruct
+	err := dbtmConnect.Model().
+		TableExpr(idTM+" AS tmodel").
+		Column("tmodel.utc", "tmodel.epoch_ten", "tmodel.avg", "tmodel.max", "tmodel.min", "tmodel.std", "tmodel.q1", "tmodel.q2", "tmodel.q3", "tmodel.anomaly_state").
+		Where("epoch_ten>?", epochstart).
+		Where("epoch_ten<?", epochend).
+		Where("lost_state=?",0).
+		Select(&file)
+
+	if err != nil {
+		log.Panicf("Error getting CSV , Reason: %v\n", err)
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"status":  http.StatusInternalServerError,
+			"massege": "Something went wrong",
+		})
+		return
+	}
+
+	var data [][]string
+
+	header := []string{"satellite_name","telemetry_name", "utc", "epoch", "average", "maximum", "minimum", "standard_deviation",
+	 "quartile1", "quartile2", "quartile3", "anomaly_state"}
+
+	data = append(data, header)
+
+	for _, rows := range file {
+		row := []string{}
+		row = append(row, tmdetail.Satellite_name, tmdetail.TM_name, rows.UTC, rows.Epoch_ten, rows.Avg, rows.Max, rows.Min, rows.Std, rows.Q1, rows.Q2, rows.Q3, rows.AnomalyState)
+		data = append(data, row)
+	}
+
+	pathName := "D:/Backend/project_go_v02/api/"+idTM+".csv"
+
+	csvFile, err := os.Create(pathName)
+
+	if err != nil {
+		log.Fatalf("failed creating csv file : %s", err)
+	}
+	csvwriter := csv.NewWriter(csvFile)
+
+	for _, empRow := range data {
+		_ = csvwriter.Write(empRow)
+	}
+	csvwriter.Flush()
+	csvFile.Close()
+
+	//fmt.Sprintf("attachment; filename=%s", filename) Downloaded file renamed
+	// header "Content-Disposition" is content to downloading file by browser 
+	// Its value is attachment
+	// filename is downloaded file renamed
+	// c.Writer.Header().Add("Content-Disposition", fmt.Sprintf("attachment; filename=%s", "csvfile.csv"))
+	c.Writer.Header().Add("Content-Disposition", fmt.Sprintf(csvName))
+    c.Writer.Header().Add("Content-Type", "application/octet-stream")
+	// c.Writer.Header().Add("Content-Type", "text/csv")
+	c.File(pathName)
+
+	
+}

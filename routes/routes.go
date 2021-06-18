@@ -34,8 +34,8 @@ func Routes(router *gin.Engine) {
 	router.POST("/post_data", controllers.POST_request_dynamic_slice)
 	router.POST("/postfloatslice", controllers.POST_request_dynamic_float_slice)
 	router.POST("/postfloatslicestuct", controllers.POST_request_dynamic_float_slice_struct)
-	router.POST("/api/tm0010010001_theos.csv", controllers.CSVdownload)
-	// router.StaticFile("/csv", "../api/tm0010010001_theos.csv")
+	router.POST("/downloadcsv", controllers.CSVdownload)
+	router.GET("/getapicsv", controllers.GET_CSVdownload)
 	router.NoRoute(notFound)
 }
 
