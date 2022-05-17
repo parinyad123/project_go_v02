@@ -15,7 +15,7 @@ func Connect_tm() *pg.DB {
 	optstm := &pg.Options{
 		User: "postgres",
 		Password: "1150",
-		Addr: ":5432",
+		Addr: "192.168.50.88:5432",
 		Database: "AnomalyDetection",
 	}
 

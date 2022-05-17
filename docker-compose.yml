@@ -1,0 +1,42 @@
+# version: '3.7'
+# services:
+#   server:
+#     build:
+#      dockerfile: Dockerfile
+#      context: .
+#     depends_on:
+#      - database
+#     networks:
+#     - backend
+#     ports:
+#     - "3030:3030"
+#   database:
+#    image: postgres
+#    restart: always
+#    ports:
+#      - "9002:5432"
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: 1150
+#      POSTGRES_DB: project_go_v2
+#      DATABASE_HOST: 192.168.50.88
+#      DATABASE_POST: 5432
+#    volumes:
+#     #  - data:C/Program Files/PostgreSQL/13/data
+#     - ./db_data:/var/lib/postgresql/data
+#     # - data:/var/lib/postgresql/data
+#    networks:
+#     - backend
+# volumes:
+#   db_data:
+# networks:
+#   backend:
+  
+# version: "2"
+
+services:
+  app:
+   image: Dockerfile
+   volumes:
+     - .:/go/src/go-with-compose
+   working_dir: /go/src/go-with-compose

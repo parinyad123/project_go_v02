@@ -13,7 +13,7 @@ import (
 func Connect_sqlpg() *sql.DB {
 
 	const (
-		host     = "localhost"
+		host     = "192.168.50.88"
 		port     = 5432
 		user     = "postgres"
 		password = "1150"
